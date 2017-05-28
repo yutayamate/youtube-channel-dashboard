@@ -4,10 +4,13 @@
 <style>
     img {
          display: block;
-         margin:auto;
+         margin: auto;
     }
     .chart {
         padding: 20px;
+    }
+    .video {
+        margin: 20px;
     }
 </style>
 {% endblock %}
@@ -46,11 +49,21 @@
     <h3>データ</h3>
     <div class="row">
         {% for datum in data %}
-        <div class="col-md-6 col-sm-12 chart">
+        <div class="chart col-md-6 col-sm-12">
             <div class="caption">
                 <h4>{{datum.0}}</h4>
             </div>
-            <canvas id="chart_{{loop.index0}}"></canvas>
+            <canvas id="chart-{{loop.index0}}"></canvas>
+        </div>
+        {% endfor %}
+    </div>
+    <h3>最新動画</h3>
+    <div class="row">
+        {% for n in range(0, 2) %}
+        <div class="col-md-6 col-sm-12">
+            <div class="video embed-responsive embed-responsive-16by9">
+                <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/videoseries?list=UU{{channel.0[2:]}}&index={{n}}" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+            </div>
         </div>
         {% endfor %}
     </div>
@@ -63,7 +76,7 @@
         !(function() {
             var data = {{data|tojson|safe}};
             for (var i = 0; i < data.length; i++) {
-                var ctx = document.getElementById('chart_' + i).getContext('2d');
+                var ctx = document.getElementById('chart-' + i).getContext('2d');
                 var chart = new Chart(ctx, {
                     'type': 'line',
                     'data': {
