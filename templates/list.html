@@ -1,0 +1,42 @@
+{% extends 'layout.html' %}
+
+{% block head %}
+<style>
+    .container > .row {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .thumbnail {
+        height: 90%;
+    }
+    .thumbnail img {
+        width: 50%;
+        height: auto;
+    }
+    .thumbnail img:hover {
+        opacity: 0.5;
+        filter: alpha(opacity=50);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h2>{{title}}</h2>
+    </div>
+    <div class="row">
+        {% for channel in channels %}
+        <div class="col-md-3 col-sm-4 col-xs-6">
+            <div class="thumbnail">
+                <a href="/channel/{{channel.0}}"><img src="{{channel.3}}" class="img-responsive img-circle" alt="{{channel.1}}"></a>
+                <div class="caption">
+                    <h4><a href="/channel/{{channel.0}}">{{channel.1}}</a></h4>
+                    <p>{{channel.2[:50] + ('...' if channel.2|length > 50 else '')}}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

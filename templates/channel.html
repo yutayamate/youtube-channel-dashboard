@@ -1,0 +1,89 @@
+{% extends 'layout.html' %}
+
+{% block head %}
+<style>
+    img {
+         display: block;
+         margin:auto;
+    }
+    .chart {
+        padding: 20px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h2>{{title}}</h2>
+    </div>
+    <div class="row">
+        <div class="col-lg-3 col-md-4 col-sm-6">
+            <img class="img-circle" src="{{channel.3}}">
+        </div>
+        <div class="col-lg-9 col-md-8 col-sm-6">
+            <dl>
+                <dt>
+                    <h3>概要</h3>
+                </dt>
+                <dd>{{channel.2|urlize(target='_blank')}}</dd>
+                <dt>
+                    <h3>チャンネル開設日</h3>
+                </dt>
+                <dd>{{channel.4}}</dd>
+                <dt>
+                    <h3>外部リンク</h3>
+                </dt>
+                <dd>
+                    <p>
+                        <a href="https://www.youtube.com/feeds/videos.xml?channel_id={{channel.0}}" target="_blank"><i class="fa fa-rss-square fa-2x" aria-hidden="true"></i></a>&nbsp;
+                        <a href="https://www.youtube.com/channel/{{channel.0}}" target="_blank"><i class="fa fa-youtube fa-2x"></i></a>&nbsp;
+                    </p>
+                </dd>
+            </dl>
+        </div>
+    </div>
+    <h3>データ</h3>
+    <div class="row">
+        {% for datum in data %}
+        <div class="col-md-6 col-sm-12 chart">
+            <div class="caption">
+                <h4>{{datum.0}}</h4>
+            </div>
+            <canvas id="chart_{{loop.index0}}"></canvas>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+    <script>
+        !(function() {
+            var data = {{data|tojson|safe}};
+            for (var i = 0; i < data.length; i++) {
+                var ctx = document.getElementById('chart_' + i).getContext('2d');
+                var chart = new Chart(ctx, {
+                    'type': 'line',
+                    'data': {
+                        'labels': data[i][2],
+                        'datasets': [{
+                            'label': data[i][0],
+                            'backgroundColor': 'rgba(255, 99, 132, 0.2)',
+                            'borderColor': 'rgb(255, 99, 132)',
+                            'data': data[i][1],
+                        }]
+                    },
+                    'options': {
+                        'elements': {
+                            'line': {
+                                'tension': 0
+                            }
+                        }
+                    }
+                });
+            }
+        })();
+    </script>
+{% endblock %}
