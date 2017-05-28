@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <title>{{title}} - YouTube Channel Dashboard</title>
+        <meta charset="utf-8">
+        <meta name="author" content="yyuuta">
+        <meta name="description" content="YouTube Channel Dashboard">
+        <meta name="viewport" content="width=device-width">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/font-awesome.min.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+        {%- block head %}{% endblock %}
+    </head>
+    <body>
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="/"><i class="fa fa-youtube-play" aria-hidden="true"></i> YouTube Channel Dashboard</a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a href="/"><i class="fa fa-home" aria-hidden="true"></i> ホーム</a></li>
+                        <li><a href="/list/"><i class="fa fa-list" aria-hidden="true"></i> チャンネル一覧</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        {% block content %}{% endblock %}
+        <footer class="footer">
+            <div class="container">
+                <p class="text-muted">Copyright (c) 2017 <a href="https://github.com/yyuuta88/" target="_blank">yyuuta88</a></p>
+            </div>
+        </footer>
+        <script src="{{ url_for('static', filename='js/jquery-3.2.1.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+        {% block script %}{% endblock %}
+    </body>
+</html>

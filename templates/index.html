@@ -1,0 +1,17 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="jumbotron">
+    <div class="container">
+        <h1>YouTube Channel Dashboard</h1>
+    　　 <p>人気チャンネルを紹介</p>
+    </div>
+</div>
+<div class="container">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <i class="fa fa-info-circle" aria-hidden="true"></i> 現在、<a href="/list/"><span class="badge">{{count}}</span> チャンネル</a> 公開中！
+        </div>
+    </div>
+</div>
+{% endblock %}
