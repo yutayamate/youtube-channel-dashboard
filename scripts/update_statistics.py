@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import sys, os, json, urllib.request, urllib.parse, sqlite3, dateutil.parser
+import register_channels
 
 DB_PATH = os.path.join(os.path.dirname(__file__), '../', 'db.sqlite3')
 API_KEY = os.environ['YOUTUBE_API_KEY']
@@ -15,7 +16,7 @@ def get_channels(cursor):
     return channels
 
 
-def retrive_channel_data(channel_id):
+def retrive_statistics(channel_id):
     params = {
         'id': channel_id,
         'key': API_KEY,
@@ -47,10 +48,23 @@ def main():
     channels = get_channels(cursor)
     for channel in channels:
         channel_id = channel[0]
-        data = retrive_channel_data(channel_id)
+
+        # Update channel information
+        snippet = register_channels.get_snippet(channel_id)
+        information = [
+            snippet['title'],
+            snippet['description'],
+            channel_id
+        ]
+        cursor.execute('''
+            UPDATE channels SET title = ?, description = ? WHERE id = ?
+        ''', information)
+
+        # Update statistics
+        statistics = retrive_statistics(channel_id)
         cursor.execute('''
             INSERT INTO statistics (channel_id, added_at, subscriber_count, video_count, view_count) VALUES (?, ?, ?, ?, ?)
-        ''', data)
+        ''', statistics)
 
     connection.commit()
     connection.close()
