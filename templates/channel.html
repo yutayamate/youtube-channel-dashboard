@@ -22,7 +22,7 @@
     </div>
     <div class="row">
         <div class="col-lg-3 col-md-4 col-sm-6">
-            <img class="img-circle" src="{{channel.3}}">
+            <img class="img-responsive img-circle" src="{{channel.3}}">
         </div>
         <div class="col-lg-9 col-md-8 col-sm-6">
             <dl>
@@ -31,11 +31,21 @@
                 </dt>
                 <dd>{{channel.2|urlize(target='_blank')}}</dd>
                 <dt>
+                    <h3>データ</h3>
+                </dt>
+                <dd>
+                    <ul>
+                        <li>チャンネル登録数: <span class="badge">{{'{0:,}'.format(channel.6)}}</span> 登録</li>
+                        <li>視聴回数 <span class="badge">{{'{0:,}'.format(channel.8)}}</span> 回</li>
+                        <li>動画本数: <span class="badge">{{'{0:,}'.format(channel.7)}}</span> 本</li>
+                    </ul>
+                </dd>
+                <dt>
                     <h3>チャンネル開設日</h3>
                 </dt>
                 <dd>{{channel.4}}</dd>
                 <dt>
-                    <h3>外部リンク</h3>
+                    <h3>リンク</h3>
                 </dt>
                 <dd>
                     <p>
@@ -46,7 +56,7 @@
             </dl>
         </div>
     </div>
-    <h3>データ</h3>
+    <h3>チャート</h3>
     <div class="row">
         {% for datum in data %}
         <div class="chart col-md-6 col-sm-12">
@@ -74,7 +84,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
     <script>
         !(function() {
-            var data = {{data|tojson|safe}};
+            var data = {{data|tojson}};
             for (var i = 0; i < data.length; i++) {
                 var ctx = document.getElementById('chart-' + i).getContext('2d');
                 var chart = new Chart(ctx, {

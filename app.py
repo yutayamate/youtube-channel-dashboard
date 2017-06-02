@@ -25,13 +25,20 @@ def route_index():
     connection = connect_db()
     cursor = connection.cursor()
     cursor.execute('''
-        SELECT COUNT (id) FROM channels
+        SELECT COUNT(id) FROM view_channels_latest;
     ''')
     count = cursor.fetchone()[0]
+    cursor.execute('''
+        SELECT * FROM view_channels_latest ORDER BY subscriber_count DESC LIMIT 10;
+    ''')
+    data = cursor.fetchall()
+    updated_at = utc_to_jst(data[0][5]).strftime('%Y/%m/%d %H:%M:%S')
     return flask.render_template(
         'index.html',
         title='Home',
-        count=count
+        count=count,
+        data=data,
+        updated_at=updated_at
     )
 
 
@@ -40,7 +47,7 @@ def route_list():
     connection = connect_db()
     cursor = connection.cursor()
     cursor.execute('''
-        SELECT * FROM channels ORDER BY title
+        SELECT * FROM view_channels_latest ORDER BY title;
     ''')
     channels = cursor.fetchall()
     return flask.render_template(
@@ -56,26 +63,27 @@ def route_channel(channel_id):
     cursor = connection.cursor()
 
     cursor.execute('''
-        SELECT * FROM channels WHERE id = ?
+        SELECT * FROM view_channels_latest WHERE id = ?;
     ''', (channel_id,))
     channel = cursor.fetchone()
     channel = list(channel)
     channel[4] = utc_to_jst(channel[4]).strftime('%Y/%m/%d %H:%M:%S')
+    print(channel)
 
     cursor.execute('''
-        SELECT * FROM statistics WHERE channel_id = ?
+        SELECT * FROM statistics WHERE channel_id = ?;
     ''', (channel_id,))
     statistics = cursor.fetchall()
 
     labels = list(map(lambda x: utc_to_jst(x[1]).strftime('%Y/%m/%d'), statistics))
     data = [
         [
-            'チャンネル登録者数',
+            'チャンネル登録',
             list(map(lambda x: x[2], statistics)),
             labels
         ],
         [
-            'チャンネル登録者 増加数',
+            'チャンネル登録 増加数',
             np.diff(list(map(lambda x: x[2], statistics))).tolist(),
             labels[1:]
         ],

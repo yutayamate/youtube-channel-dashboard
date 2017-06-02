@@ -32,7 +32,7 @@
                 <a href="/channel/{{channel.0}}"><img src="{{channel.3}}" class="img-responsive img-circle" alt="{{channel.1}}"></a>
                 <div class="caption">
                     <h4><a href="/channel/{{channel.0}}">{{channel.1}}</a></h4>
-                    <p>{{channel.2[:50] + ('...' if channel.2|length > 50 else '')}}</p>
+                    <p>{{channel.2|truncate(50, True)}}</p>
                 </div>
             </div>
         </div>
