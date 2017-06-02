@@ -10,7 +10,7 @@ API_ENDPOINT = 'https://www.googleapis.com/youtube/v3/channels?'
 
 def get_channels(cursor):
     cursor.execute('''
-        SELECT * FROM channels
+        SELECT * FROM channels;
     ''')
     channels = cursor.fetchall()
     return channels
@@ -42,7 +42,7 @@ def main():
     connection = sqlite3.connect(DB_PATH)
     cursor = connection.cursor()
     cursor.execute('''
-        PRAGMA foreign_keys = ON
+        PRAGMA foreign_keys = ON;
     ''')
 
     channels = get_channels(cursor)
@@ -57,13 +57,13 @@ def main():
             channel_id
         ]
         cursor.execute('''
-            UPDATE channels SET title = ?, description = ? WHERE id = ?
+            UPDATE channels SET title = ?, description = ? WHERE id = ?;
         ''', information)
 
         # Update statistics
         statistics = retrive_statistics(channel_id)
         cursor.execute('''
-            INSERT INTO statistics (channel_id, added_at, subscriber_count, video_count, view_count) VALUES (?, ?, ?, ?, ?)
+            INSERT INTO statistics (channel_id, added_at, subscriber_count, video_count, view_count) VALUES (?, ?, ?, ?, ?);
         ''', statistics)
 
     connection.commit()

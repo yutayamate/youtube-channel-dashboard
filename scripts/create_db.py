@@ -18,7 +18,7 @@ def main():
             thumbnail_url TEXT,
             published_at DATETIME,
             PRIMARY KEY (id)
-        )
+        );
     ''')
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS statistics (
@@ -29,10 +29,15 @@ def main():
             view_count INTEGER,
             PRIMARY KEY (channel_id, added_at),
             FOREIGN KEY (channel_id) REFERENCES channels (id)
-        )
+        );
     ''')
-    connection.commit()
-    connection.close()
+    cursor.execute('''
+        CREATE VIEW IF NOT EXISTS view_channels_latest AS
+            SELECT channels.*, latest.added_at, latest.subscriber_count, latest.video_count, latest.view_count FROM channels
+            INNER JOIN
+                (SELECT *, MAX(added_at) FROM statistics GROUP BY channel_id) AS latest
+            ON channels.id = latest.channel_id;
+    ''')
 
 
 if __name__ == '__main__':
