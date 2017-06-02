@@ -30,7 +30,7 @@ def main():
         ]
         # Register channels
         cursor.execute('''
-            INSERT OR IGNORE INTO channels (id, title, description, thumbnail_url, published_at) VALUES (?, ?, ?, ?, ?)
+            INSERT OR IGNORE INTO channels (id, title, description, thumbnail_url, published_at) VALUES (?, ?, ?, ?, ?);
         ''', data)
 
     connection.commit()
