@@ -8,7 +8,7 @@ def main():
     connection = sqlite3.connect(DB_PATH)
     cursor = connection.cursor()
     cursor.execute('''
-        PRAGMA foreign_keys = ON
+        PRAGMA foreign_keys = ON;
     ''')
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS channels (
