@@ -36,12 +36,12 @@
                 <dd>
                     <ul>
                         <li>チャンネル登録数: <span class="badge">{{'{0:,}'.format(channel.6)}}</span> 登録</li>
-                        <li>視聴回数 <span class="badge">{{'{0:,}'.format(channel.8)}}</span> 回</li>
+                        <li>視聴回数: <span class="badge">{{'{0:,}'.format(channel.8)}}</span> 回</li>
                         <li>動画本数: <span class="badge">{{'{0:,}'.format(channel.7)}}</span> 本</li>
                     </ul>
                 </dd>
                 <dt>
-                    <h3>チャンネル開設日</h3>
+                    <h3>チャンネル開設</h3>
                 </dt>
                 <dd>{{channel.4}}</dd>
                 <dt>
@@ -80,8 +80,8 @@
 </div>
 {% endblock %}
 
-{% block script %}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+{% block foot %}
+    <script src="{{ url_for('static', filename='js/Chart.min.js') }}"></script>
     <script>
         !(function() {
             var data = {{data|tojson}};
