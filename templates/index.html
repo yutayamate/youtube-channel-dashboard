@@ -17,6 +17,7 @@
 <div class="jumbotron">
     <div class="container">
         <h1>YouTube Channel Dashboard</h1>
+        <p>No YouTube, No Life.</p>
     </div>
 </div>
 <div class="container">
@@ -26,34 +27,45 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-xs-12">
+        <div class="col-md-6 col-sm-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <i class="fa fa-star" aria-hidden="true"></i> チャンネル登録数 TOP 10 ({{'{0:,}'.format(count)}}チャンネル中)
+                    <i class="fa fa-bolt" aria-hidden="true"></i> YouTube で人気 - 日本
                 </div>
                 <div class="panel-body">
-                    <table class="table table-hover">
-                        <thead>
+                    <div class="video embed-responsive embed-responsive-16by9">
+                        <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/videoseries?list=UUMlwQuZJJQppHO6-FkGgiqQ" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="fa fa-star" aria-hidden="true"></i> チャンネル登録数 TOP {{data|length}} ({{'{0:,}'.format(count)}}チャンネル中)
+                </div>
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>チャンネル</th>
+                                    <th>チャンネル登録数 <i class="fa fa-sort-desc" aria-hidden="true"></i></th>
+                                </tr>
+                            </thead>
+                            {% for datum in data %}
                             <tr>
-                                <th>#</th>
-                                <th>チャンネル</th>
-                                <th>チャンネル登録数 <i class="fa fa-sort-desc" aria-hidden="true"></i></th>
-                                <th>視聴回数</th>
-                                <th>動画本数</th>
+                                <td>{{loop.index}}</td>
+                                <td>
+                                    <a href="/channel/{{datum.0}}"><img src="{{datum.3}}" class="img-circle"></a>&nbsp;&nbsp;
+                                    <a href="/channel/{{datum.0}}">{{datum.1}}</a>
+                                </td>
+                                <td><span class="badge">{{'{0:,}'.format(datum.6)}}</span> 登録</td>
                             </tr>
-                        </thead>
-                        {% for datum in data %}
-                        <tr>
-                            <td>{{loop.index}}</td>
-                            <td>
-                                <a href="/channel/{{datum.0}}"><img src="{{datum.3}}" class="img-circle"></a>&nbsp;&nbsp;
-                                <a href="/channel/{{datum.0}}">{{datum.1}}</a></td>
-                            <td>{{'{0:,}'.format(datum.6)}} 登録</td>
-                            <td>{{'{0:,}'.format(datum.8)}} 回</td>
-                            <td>{{'{0:,}'.format(datum.7)}} 本</td>
-                        </tr>
-                        {% endfor %}
-                    </table>
+                            {% endfor %}
+                        </table>
+                    </div>
                 </div>
                 <div class="panel-footer">最終更新: {{updated_at}}</div>
             </div>
