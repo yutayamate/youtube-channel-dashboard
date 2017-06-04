@@ -29,10 +29,10 @@ def route_index():
     ''')
     count = cursor.fetchone()[0]
     cursor.execute('''
-        SELECT * FROM view_channels_latest ORDER BY subscriber_count DESC LIMIT 10;
+        SELECT * FROM view_channels_latest ORDER BY subscriber_count DESC LIMIT 5;
     ''')
     data = cursor.fetchall()
-    updated_at = utc_to_jst(data[0][5]).strftime('%Y/%m/%d %H:%M:%S')
+    updated_at = utc_to_jst(data[0][5]).strftime('%Y年%-m月%-d日 %-H時%-M分')
     return flask.render_template(
         'index.html',
         title='Home',
@@ -47,7 +47,7 @@ def route_list():
     connection = connect_db()
     cursor = connection.cursor()
     cursor.execute('''
-        SELECT * FROM view_channels_latest ORDER BY title;
+        SELECT * FROM view_channels_latest ORDER BY title ASC;
     ''')
     channels = cursor.fetchall()
     return flask.render_template(
@@ -67,8 +67,7 @@ def route_channel(channel_id):
     ''', (channel_id,))
     channel = cursor.fetchone()
     channel = list(channel)
-    channel[4] = utc_to_jst(channel[4]).strftime('%Y/%m/%d %H:%M:%S')
-    print(channel)
+    channel[4] = utc_to_jst(channel[4]).strftime('%Y年%-m月%-d日 %-H時%-M分')
 
     cursor.execute('''
         SELECT * FROM statistics WHERE channel_id = ?;
