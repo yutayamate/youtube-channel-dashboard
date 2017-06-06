@@ -27,6 +27,8 @@ def retrive_statistics(channel_id):
         response_header = response.info()
         response_body = response.read().decode('utf-8')
         response_data = json.loads(response_body)
+        if not len(response_data['items']) > 0:
+            return None
         statistics = response_data['items'][0]['statistics']
         data = [
             channel_id,
@@ -51,6 +53,8 @@ def main():
 
         # Update channel information
         snippet = register_channels.get_snippet(channel_id)
+        if not snippet:
+            continue
         information = [
             snippet['title'],
             snippet['description'],
@@ -62,6 +66,8 @@ def main():
 
         # Update statistics
         statistics = retrive_statistics(channel_id)
+        if not statistics:
+            continue
         cursor.execute('''
             INSERT INTO statistics (channel_id, added_at, subscriber_count, video_count, view_count) VALUES (?, ?, ?, ?, ?);
         ''', statistics)
