@@ -21,6 +21,9 @@ def main():
         qs = urllib.parse.urlparse(element.attrib['xmlUrl']).query
         channel_id = urllib.parse.parse_qs(qs)['channel_id'][0]
         snippet = get_snippet(channel_id)
+        if not snippet:
+            sys.stderr.write('Channel ID "{}" is not found. Skipped\n'.format(channel_id))
+            continue
         data = [
             channel_id,
             snippet['title'],
@@ -47,8 +50,11 @@ def get_snippet(channel_id):
     with urllib.request.urlopen(url) as response:
         response_body = response.read().decode('utf-8')
         response_data = json.loads(response_body)
-        snippet = response_data['items'][0]['snippet']
-        return snippet
+        if len(response_data['items']) > 0:
+            snippet = response_data['items'][0]['snippet']
+            return snippet
+        else:
+            return None
 
 
 if __name__ == '__main__':
