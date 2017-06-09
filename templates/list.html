@@ -23,7 +23,33 @@
 {% block content %}
 <div class="container">
     <div class="page-header">
-        <h2>{{title}}</h2>
+        <h2>
+            {{title}}
+            <div class="dropdown pull-right">
+                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    並び順
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                    {% set sort_items = [
+                        ('チャンネル名 (昇順)', 'title', 0),
+                        ('チャンネル名 (降順)', 'title', 1),
+                        ('チャンネル登録 (多)', 'subscriber_count', 1),
+                        ('チャンネル登録 (少)', 'subscriber_count', 0),
+                        ('視聴回数 (多)', 'view_count', 1),
+                        ('視聴回数 (少)', 'view_count', 0),
+                        ('動画本数 (多)', 'video_count', 1),
+                        ('動画本数 (少)', 'video_count', 0),
+                    ] %}
+                    {% for title, sort, reverse in sort_items %}
+                    <li><a href="/list?sort={{sort}}&reverse={{reverse}}">{{title}}</a></li>
+                    {% if loop.index % 2 == 0 and loop.index != sort_items|length %}
+                    <li role="separator" class="divider"></li>
+                    {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
+        </h2>
     </div>
     <div class="row">
         {% for channel in channels %}
