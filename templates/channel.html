@@ -90,13 +90,13 @@
                 var chart = new Chart(ctx, {
                     'type': 'line',
                     'data': {
-                        'labels': data[i][2],
                         'datasets': [{
                             'label': data[i][0],
                             'backgroundColor': 'rgba(255, 99, 132, 0.2)',
                             'borderColor': 'rgb(255, 99, 132)',
                             'data': data[i][1],
-                        }]
+                        }],
+                        'labels': data[i][2]
                     },
                     'options': {
                         'elements': {

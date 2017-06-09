@@ -44,12 +44,24 @@ def route_index():
 
 @app.route('/list/')
 def route_list():
+    sort_index = {
+        'title': 1,
+        'subscriber_count': 6,
+        'video_count': 7,
+        'view_count': 8
+    }
+    sort_key = flask.request.args.get('sort', default='title', type=str)
+    reverse = flask.request.args.get('reverse', default=0, type=int)
     connection = connect_db()
     cursor = connection.cursor()
     cursor.execute('''
-        SELECT * FROM view_channels_latest ORDER BY title ASC;
+        SELECT * FROM view_channels_latest;
     ''')
     channels = cursor.fetchall()
+    if sort_key == 'title':
+        channels.sort(key=lambda x: x[sort_index[sort_key]].lower(), reverse=reverse)
+    else:
+        channels.sort(key=lambda x: x[sort_index[sort_key]], reverse=reverse)
     return flask.render_template(
         'list.html',
         title='チャンネル一覧',
