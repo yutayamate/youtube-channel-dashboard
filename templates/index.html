@@ -1,17 +1,76 @@
 {% extends 'layout.html' %}
 
+{% block head %}
+<style>
+    table img {
+         width: 30px;
+         height: auto;
+    }
+    table img:hover {
+        opacity: 0.5;
+        filter: alpha(opacity=50);
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="jumbotron">
     <div class="container">
         <h1>YouTube Channel Dashboard</h1>
-    　　 <p>人気チャンネルを紹介</p>
+        <p>No YouTube, No Life.</p>
     </div>
 </div>
 <div class="container">
     <div class="panel panel-default">
         <div class="panel-body">
-            <i class="fa fa-info-circle" aria-hidden="true"></i> 現在、<a href="/list/"><span class="badge">{{count}}</span> チャンネル</a> 公開中！
+            <i class="fa fa-info-circle" aria-hidden="true"></i> 現在、<a href="/list/"><span class="badge">{{'{0:,}'.format(count)}}</span> チャンネル</a> 公開中！
         </div>
     </div>
+    <div class="row">
+        <div class="col-md-6 col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="fa fa-bolt" aria-hidden="true"></i> YouTube で人気 - 日本
+                </div>
+                <div class="panel-body">
+                    <div class="video embed-responsive embed-responsive-16by9">
+                        <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/videoseries?list=UUMlwQuZJJQppHO6-FkGgiqQ" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="fa fa-star" aria-hidden="true"></i> チャンネル登録数 TOP {{data|length}} ({{'{0:,}'.format(count)}}チャンネル中)
+                </div>
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>チャンネル</th>
+                                    <th>チャンネル登録数 <i class="fa fa-sort-desc" aria-hidden="true"></i></th>
+                                </tr>
+                            </thead>
+                            {% for datum in data %}
+                            <tr>
+                                <td>{{loop.index}}</td>
+                                <td>
+                                    <a href="/channel/{{datum.0}}"><img src="{{datum.3}}" class="img-circle"></a>&nbsp;&nbsp;
+                                    <a href="/channel/{{datum.0}}">{{datum.1}}</a>
+                                </td>
+                                <td><span class="badge">{{'{0:,}'.format(datum.6)}}</span> 登録</td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+                <div class="panel-footer">最終更新: {{updated_at}}</div>
+            </div>
+        </div>
+    </div>
+
 </div>
 {% endblock %}
