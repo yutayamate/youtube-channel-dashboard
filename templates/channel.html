@@ -4,10 +4,13 @@
 <style>
     img {
          display: block;
-         margin:auto;
+         margin: auto;
     }
     .chart {
         padding: 20px;
+    }
+    .video {
+        margin: 20px;
     }
 </style>
 {% endblock %}
@@ -19,7 +22,7 @@
     </div>
     <div class="row">
         <div class="col-lg-3 col-md-4 col-sm-6">
-            <img class="img-circle" src="{{channel.3}}">
+            <img class="img-responsive img-circle" src="{{channel.3}}">
         </div>
         <div class="col-lg-9 col-md-8 col-sm-6">
             <dl>
@@ -28,11 +31,21 @@
                 </dt>
                 <dd>{{channel.2|urlize(target='_blank')}}</dd>
                 <dt>
-                    <h3>チャンネル開設日</h3>
+                    <h3>データ</h3>
+                </dt>
+                <dd>
+                    <ul>
+                        <li>チャンネル登録数: <span class="badge">{{'{0:,}'.format(channel.6)}}</span> 登録</li>
+                        <li>視聴回数: <span class="badge">{{'{0:,}'.format(channel.8)}}</span> 回</li>
+                        <li>動画本数: <span class="badge">{{'{0:,}'.format(channel.7)}}</span> 本</li>
+                    </ul>
+                </dd>
+                <dt>
+                    <h3>チャンネル開設</h3>
                 </dt>
                 <dd>{{channel.4}}</dd>
                 <dt>
-                    <h3>外部リンク</h3>
+                    <h3>リンク</h3>
                 </dt>
                 <dd>
                     <p>
@@ -43,37 +56,47 @@
             </dl>
         </div>
     </div>
-    <h3>データ</h3>
+    <h3>チャート</h3>
     <div class="row">
         {% for datum in data %}
-        <div class="col-md-6 col-sm-12 chart">
+        <div class="chart col-md-6 col-sm-12">
             <div class="caption">
                 <h4>{{datum.0}}</h4>
             </div>
-            <canvas id="chart_{{loop.index0}}"></canvas>
+            <canvas id="chart-{{loop.index0}}"></canvas>
+        </div>
+        {% endfor %}
+    </div>
+    <h3>最新動画</h3>
+    <div class="row">
+        {% for n in range(0, 2) %}
+        <div class="col-md-6 col-sm-12">
+            <div class="video embed-responsive embed-responsive-16by9">
+                <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/videoseries?list=UU{{channel.0[2:]}}&index={{n}}" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+            </div>
         </div>
         {% endfor %}
     </div>
 </div>
 {% endblock %}
 
-{% block script %}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+{% block foot %}
+    <script src="{{ url_for('static', filename='js/Chart.min.js') }}"></script>
     <script>
         !(function() {
-            var data = {{data|tojson|safe}};
+            var data = {{data|tojson}};
             for (var i = 0; i < data.length; i++) {
-                var ctx = document.getElementById('chart_' + i).getContext('2d');
+                var ctx = document.getElementById('chart-' + i).getContext('2d');
                 var chart = new Chart(ctx, {
                     'type': 'line',
                     'data': {
-                        'labels': data[i][2],
                         'datasets': [{
                             'label': data[i][0],
                             'backgroundColor': 'rgba(255, 99, 132, 0.2)',
                             'borderColor': 'rgb(255, 99, 132)',
                             'data': data[i][1],
-                        }]
+                        }],
+                        'labels': data[i][2]
                     },
                     'options': {
                         'elements': {
